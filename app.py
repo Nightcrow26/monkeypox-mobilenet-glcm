@@ -6,16 +6,20 @@ from keras.models import load_model
 from skimage.feature import graycomatrix, graycoprops
 import matplotlib.pyplot as plt
 
-# Fungsi ekstraksi fitur GLCM
 def extract_glcm_features(image):
     image_array = np.array(image)
-    gray_image = cv2.cvtColor(image_array, cv2.COLOR_RGB2GRAY)
-    gray_image_uint = gray_image.astype(np.uint8)
+
+    # Gunakan PIL untuk konversi ke grayscale
+    image_pil = Image.fromarray(image_array)
+    gray_image = image_pil.convert("L")
+    gray_image_uint = np.array(gray_image).astype(np.uint8)
+
     glcm = graycomatrix(gray_image_uint, distances=[1], angles=[0], levels=256, symmetric=True, normed=True)
     contrast = graycoprops(glcm, 'contrast').flatten()
     energy = graycoprops(glcm, 'energy').flatten()
     correlation = graycoprops(glcm, 'correlation').flatten()
     homogeneity = graycoprops(glcm, 'homogeneity').flatten()
+
     return np.concatenate([contrast, energy, correlation, homogeneity])
 
 # Mapping label
