@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import cv2
+from PIL import Image
 from keras.preprocessing.image import img_to_array, load_img
 from keras.models import load_model
 from skimage.feature import graycomatrix, graycoprops
