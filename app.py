@@ -33,6 +33,34 @@ class_mapping = {
     5: 'Monkeypox'
 }
 
+# Tambahkan di bagian atas (setelah class_mapping)
+disease_explanations = {
+    "Chickenpox": (
+        "Cacar air (varicella) biasanya ditandai ruam yang berubah menjadi "
+        "lepuh berisi cairan dan kemudian berkeropeng; sering bermula di dada, punggung, dan wajah."
+    ),
+    "Cowpox": (
+        "Cowpox adalah infeksi zoonosis langka; pada manusia umumnya menimbulkan "
+        "lesi kulit lokal, sering di tangan/ wajah, terkait paparan hewan terinfeksi."
+    ),
+    "HFMD": (
+        "Hand, Foot, and Mouth Disease (HFMD) umumnya menyebabkan demam ringan, "
+        "sariawan di mulut, dan ruam/lepuh pada telapak tangan dan kaki; kebanyakan pulih 7–10 hari."
+    ),
+    "Healthy": (
+        "Tidak tampak ciri khas penyakit pada citra; namun hasil ini bersifat indikatif dari model."
+    ),
+    "Measles": (
+        "Campak umumnya diawali demam, batuk, pilek, mata merah; diikuti ruam "
+        "merah yang mulai dari wajah lalu menyebar ke tubuh."
+    ),
+    "Monkeypox": (
+        "Mpox (Monkeypox) ditandai ruam/lesi yang dapat nyeri, sering disertai "
+        "pembesaran kelenjar getah bening, demam, sakit kepala, dan lelah."
+    ),
+}
+
+
 # Judul aplikasi
 st.title("Prediksi Penyakit Kulit Menggunakan Deep Learning + GLCM")
 st.write("Unggah gambar kulit untuk diprediksi jenis penyakitnya.")
@@ -84,10 +112,20 @@ if uploaded_file is not None:
             predicted_class_index = np.argmax(predictions[0])
             predicted_class_label = class_mapping[predicted_class_index]
             confidence = np.max(predictions[0]) * 100
+           
 
             # Tampilkan hasil
-            st.success(f"Prediksi: **{predicted_class_label}**")
-            st.info(f"Akurasi Prediksi: **{confidence:.2f}%**")
+            if predicted_class_label == "Monkeypox":
+                st.error(f"Prediksi: **{predicted_class_label}**")
+            else:
+                st.success(f"Prediksi: **{predicted_class_label}**")
+
+             st.info(f"Akurasi Prediksi: **{confidence:.2f}%**")
+            
+            # Tambahkan penjelasan singkat penyakit
+            st.subheader("Ringkasan Diagnosis Model")
+            st.write(disease_explanations.get(predicted_class_label, "Ringkasan belum tersedia."))
+
 
             # Tampilkan properti GLCM
             st.subheader("Fitur GLCM")
@@ -100,3 +138,4 @@ if uploaded_file is not None:
             st.subheader("Probabilitas Tiap Kelas")
             probs = {class_mapping[i]: float(predictions[0][i]) for i in range(len(class_mapping))}
             st.bar_chart(probs)
+
