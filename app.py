@@ -118,7 +118,7 @@ if uploaded_file is not None:
             if predicted_class_label == "Monkeypox":
                 st.error(f"Prediksi: **{predicted_class_label}**")
             else:
-                st.success(f"Prediksi: **{predicted_class_label}**")
+                st.success(f"Prediksi: **{predicted_class_label}**, Bukan Monkeypox")
 
             st.info(f"Akurasi Prediksi: **{confidence:.2f}%**")
             
@@ -138,5 +138,6 @@ if uploaded_file is not None:
             st.subheader("Probabilitas Tiap Kelas")
             probs = {class_mapping[i]: float(predictions[0][i]) for i in range(len(class_mapping))}
             st.bar_chart(probs)
+
 
 
